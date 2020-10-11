@@ -12,6 +12,7 @@ use amethyst::{
 };
 
 use log::info;
+use crate::components::Player;
 
 /// A dummy game state that shows 3 sprites.
 pub struct MyState;
@@ -35,6 +36,7 @@ impl SimpleState for MyState {
         // place our sprites correctly later. We'll clone this since we'll
         // pass the world mutably to the following functions.
         let dimensions = (*world.read_resource::<ScreenDimensions>()).clone();
+        // let dimensions = ScreenDimensions::new(crate::ARENA_HEIGHT as u32, crate::ARENA_WIDTH as u32, 1.);
 
         // Place the camera
         init_camera(world, &dimensions);
@@ -102,7 +104,8 @@ fn load_sprites(world: &mut World) -> Vec<SpriteRender> {
         let loader = world.read_resource::<Loader>();
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
         loader.load(
-            "sprites/logo.png",
+            // "sprites/logo.png",
+            "sprites/marukujira-x2.png",
             ImageFormat::default(),
             (),
             &texture_storage,
@@ -115,7 +118,8 @@ fn load_sprites(world: &mut World) -> Vec<SpriteRender> {
         let loader = world.read_resource::<Loader>();
         let sheet_storage = world.read_resource::<AssetStorage<SpriteSheet>>();
         loader.load(
-            "sprites/logo.ron",
+            // "sprites/logo.ron",
+            "sprites/marukujira-x2.ron",
             SpriteSheetFormat(texture_handle),
             (),
             &sheet_storage,
@@ -138,8 +142,8 @@ fn load_sprites(world: &mut World) -> Vec<SpriteRender> {
 fn init_sprites(world: &mut World, sprites: &[SpriteRender], dimensions: &ScreenDimensions) {
     for (i, sprite) in sprites.iter().enumerate() {
         // Center our sprites around the center of the window
-        let x = (i as f32 - 1.) * 100. + dimensions.width() * 0.5;
-        let y = (i as f32 - 1.) * 100. + dimensions.height() * 0.5;
+        let x = (i as f32 - 1.) * 50. + dimensions.width() * 0.5;
+        let y = (i as f32 - 1.) * 50. + dimensions.height() * 0.5;
         let mut transform = Transform::default();
         transform.set_translation_xyz(x, y, 0.);
 
@@ -151,6 +155,7 @@ fn init_sprites(world: &mut World, sprites: &[SpriteRender], dimensions: &Screen
             .create_entity()
             .with(sprite.clone())
             .with(transform)
+            .with(Player::new("marukujira".to_string(), 40.))
             .build();
     }
 }
@@ -199,7 +204,7 @@ pub fn create_ui_example(world: &mut World) {
         ))
         .with(UiText::new(
             font,
-            "Hello, Amethyst UI!".to_string(),
+            "Marukujiland".to_string(),
             [1., 1., 1., 1.],
             30.,
             LineMode::Single,

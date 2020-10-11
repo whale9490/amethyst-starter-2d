@@ -10,8 +10,15 @@ use amethyst::{
     ui::{RenderUi, UiBundle},
     utils::application_root_dir,
 };
+use crate::bundle::MyGameBundle;
 
 mod state;
+mod components;
+mod systems;
+mod bundle;
+
+// const ARENA_HEIGHT: f32 = 400.0;
+// const ARENA_WIDTH: f32 = 600.0;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -36,7 +43,8 @@ fn main() -> amethyst::Result<()> {
                 )
                 .with_plugin(RenderUi::default())
                 .with_plugin(RenderFlat2D::default()),
-        )?;
+        )?
+        .with_bundle(MyGameBundle)?;
 
     let mut game = Application::new(resources, state::MyState, game_data)?;
     game.run();
